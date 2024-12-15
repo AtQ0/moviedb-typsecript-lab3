@@ -9,7 +9,9 @@ describe('<MovieManager /> - Add Movie', () => {
         }).as('addMovie');
 
         // Visit the page
-        cy.visit('http://localhost:3000/');
+        cy.visit('http://localhost:3000/user');
+
+        cy.wait(1000); // Wait
 
         // Add new movie
         cy.get('input[placeholder="Movie Name"]').type('Dunkirk');

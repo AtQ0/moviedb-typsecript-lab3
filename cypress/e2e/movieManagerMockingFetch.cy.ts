@@ -4,7 +4,7 @@ describe('<MovieManager /> - Fetch Movies', () => {
         cy.intercept('GET', '/api/movies', { fixture: 'movies.json' }).as('getMovies');
 
         // Visit the Movie Manager page
-        cy.visit('http://localhost:3000/');
+        cy.visit('http://localhost:3000/user/');
 
         // Wait for the GET request to complete
         cy.wait('@getMovies');

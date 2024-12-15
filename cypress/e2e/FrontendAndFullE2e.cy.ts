@@ -19,7 +19,9 @@ interface Movie {
 //Full E2E test involving frontend, backend, and database
 describe("Complete E2E Test: Add and Fetch Movie", () => {
   it("adds a movie and verifies it in the database", () => {
-    cy.visit("http://localhost:3000/");
+    cy.visit("http://localhost:3000/user");
+
+    cy.wait(2000); // Wait
 
     // Add a new movie
     cy.get('input[placeholder="Movie Name"]').type("Dunkirk");
