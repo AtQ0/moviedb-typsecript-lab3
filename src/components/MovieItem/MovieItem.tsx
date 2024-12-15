@@ -1,6 +1,5 @@
-// MovieItem.tsx (src/app/components/)
 import React from "react";
-import { MovieItemProps } from "../interfaces/movieInterfaces"; // Updated import path
+import { MovieItemProps } from "../../interfaces/movieInterfaces"; // Updated import path
 
 const MovieItem = ({ movie, onEdit, onDelete }: MovieItemProps) => {
     return (

@@ -1,10 +1,13 @@
 "use client";
 import React from "react";
+import LoginForm from "../components/Login/LoginForm";
 
 export default function Home() {
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Hello, World!</h1>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="text-center p-6 bg-white rounded-lg shadow-md w-96">
+        <LoginForm />
+      </div>
     </div>
   );
 }

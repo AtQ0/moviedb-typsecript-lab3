@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
-// import localFont from "next/font/local";
 import "./globals.css";
-
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-
+import Header from "../components/Header/Header"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <header>
-          {/*Import Header component here*/}
+          <Header />
         </header>
         <main>
           {children}

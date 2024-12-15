@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import MovieItem from "../../components/MovieItem";
+import MovieItem from "../../components/MovieItem/MovieItem";
 import { Movie } from "../../interfaces/movieInterfaces"; // Updated import path
 
 export default function User() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import MovieItem from './MovieItem';
-import type { MovieItemProps } from '../interfaces/movieInterfaces';
+import type { MovieItemProps } from '../../interfaces/movieInterfaces';
 
 describe('<MovieItem />', () => {
   it('renders correctly with props', () => {
