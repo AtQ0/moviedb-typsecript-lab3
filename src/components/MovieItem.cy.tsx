@@ -20,10 +20,16 @@ describe('<MovieItem />', () => {
 
     // Assertions
     cy.contains('Dunkirk (2017)').should('exist');
+
+    // Adding a delay before clicking the "Edit" button
+    cy.wait(1000); // Wait
     cy.contains('Edit').click();
     cy.get('@onEditMock').should('have.been.calledOnce');
 
+    // Adding a delay before clicking the "Delete" button
+    cy.wait(1000); // Wait
     cy.contains('Delete').click();
     cy.get('@onDeleteMock').should('have.been.calledOnce');
+    cy.wait(1000); // Wait
   });
 });
