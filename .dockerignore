@@ -1,0 +1,7 @@
+# Exclude sensitive environment files
+.env*
+.env.docker
+
+# Exclude build and temporary files
+.next
+node_modules

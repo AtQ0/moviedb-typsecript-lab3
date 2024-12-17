@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "jsx": "preserve",
+        "types": [
+            "mocha",
+            "cypress"
+        ],
+        "skipLibCheck": true
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.tsx"
+    ]
+}
