@@ -1,7 +1,11 @@
-describe('LoginForm Component', () => {
+import React from 'react';
+import { mount } from 'cypress/react'; // Import Cypress mount function
+import LoginForm from './LoginForm';  // Adjust the path to your LoginForm component
+
+describe('<LoginForm />', () => {
     beforeEach(() => {
-        // Visit the page where LoginForm is rendered
-        cy.visit('http://localhost:3000/');
+        // Mount the LoginForm component directly
+        mount(<LoginForm />);
     });
 
     it('renders the login button', () => {

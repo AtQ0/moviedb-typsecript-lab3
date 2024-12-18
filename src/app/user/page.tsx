@@ -96,10 +96,10 @@ export default function User() {
 
     return (
         <div className="p-5">
-            <h1 className="text-3xl font-bold text-center">Movie Manager</h1>
+
 
             {/* Add Movie controls container */}
-            <div className="my-5 p-4 bg-blue-200 rounded shadow">
+            <div className="my-10 p-4 bg-blue-200 rounded shadow">
                 <h2 className="text-xl text-black font-bold mb-2">Add New Movie</h2>
                 <input
                     type="text"
