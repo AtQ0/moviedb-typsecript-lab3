@@ -1,6 +1,6 @@
 import React from 'react';
-import { mount } from 'cypress/react'; // Import Cypress mount function
-import LoginForm from './LoginForm';  // Adjust the path to your LoginForm component
+import { mount } from 'cypress/react';
+import LoginForm from './LoginForm';
 
 describe('<LoginForm />', () => {
     beforeEach(() => {
