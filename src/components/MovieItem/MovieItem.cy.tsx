@@ -1,35 +1,137 @@
-import React from 'react';
-import MovieItem from './MovieItem';
-import type { MovieItemProps } from '../../types/interfaces/movieInterfaces';
+import MovieItem from './MovieItem'; // Adjust the path based on where your MovieItem component is located
 
 describe('<MovieItem />', () => {
-  it('renders correctly with props', () => {
-    // Mock data for the props
-    const mockMovie: MovieItemProps['movie'] = { id: 1, name: 'Dunkirk', year: 2017 };
-    const onEditMock = cy.stub().as('onEditMock');
-    const onDeleteMock = cy.stub().as('onDeleteMock');
+  const mockMovie = {
+    id: 1,
+    name: 'Inception',
+    year: 2010
+  };
 
-    // Mount the component with the mock props
+  beforeEach(() => {
     cy.mount(
       <MovieItem
         movie={mockMovie}
-        onEdit={onEditMock}
-        onDelete={onDeleteMock}
+        onEdit={() => { }}
+        onDelete={() => { }}
+        onFavorite={() => { }}
+        isFavorite={false}
+      />
+    );
+  });
+
+  it('renders the movie name and year', () => {
+    // GIVEN: A MovieItem component with a movie prop
+    // WHEN: The component is rendered
+    // THEN: The movie name and year should be visible
+    cy.contains('Inception (2010)').should('be.visible');
+  });
+
+  it('calls onEdit with movie id when Edit button is clicked', () => {
+    // GIVEN: A MovieItem component with an onEdit function
+    const onEditSpy = cy.spy().as('onEdit');
+    cy.mount(
+      <MovieItem
+        movie={mockMovie}
+        onEdit={onEditSpy}
+        onDelete={() => { }}
+        onFavorite={() => { }}
+        isFavorite={false}
       />
     );
 
-    // Assertions
-    cy.contains('Dunkirk (2017)').should('exist');
-
-    // Adding a delay before clicking the "Edit" button
-    cy.wait(1000); // Wait
+    // WHEN: The "Edit" button is clicked
     cy.contains('Edit').click();
-    cy.get('@onEditMock').should('have.been.calledOnce');
 
-    // Adding a delay before clicking the "Delete" button
-    cy.wait(1000); // Wait
+    // THEN: The onEdit function should be called with the movie id
+    cy.get('@onEdit').should('have.been.calledWith', mockMovie.id);
+  });
+
+  it('calls onDelete with movie id when Delete button is clicked', () => {
+    // GIVEN: A MovieItem component with an onDelete function
+    const onDeleteSpy = cy.spy().as('onDelete');
+    cy.mount(
+      <MovieItem
+        movie={mockMovie}
+        onEdit={() => { }}
+        onDelete={onDeleteSpy}
+        onFavorite={() => { }}
+        isFavorite={false}
+      />
+    );
+
+    // WHEN: The "Delete" button is clicked
     cy.contains('Delete').click();
-    cy.get('@onDeleteMock').should('have.been.calledOnce');
-    cy.wait(1000); // Wait
+
+    // THEN: The onDelete function should be called with the movie id
+    cy.get('@onDelete').should('have.been.calledWith', mockMovie.id);
+  });
+
+  it('calls onFavorite when Favorite button is clicked', () => {
+    // GIVEN: A MovieItem component with an onFavorite function
+    const onFavoriteSpy = cy.spy().as('onFavorite');
+    cy.mount(
+      <MovieItem
+        movie={mockMovie}
+        onEdit={() => { }}
+        onDelete={() => { }}
+        onFavorite={onFavoriteSpy}
+        isFavorite={false}
+      />
+    );
+
+    // WHEN: The "Add to Favorites" button is clicked
+    cy.contains('Add to Favorites').click();
+
+    // THEN: The onFavorite function should be called once
+    cy.get('@onFavorite').should('have.been.calledOnce');
+  });
+
+  it('shows "Remove from Favorites" when isFavorite is true', () => {
+    // GIVEN: A MovieItem component with isFavorite set to true
+    cy.mount(
+      <MovieItem
+        movie={mockMovie}
+        onEdit={() => { }}
+        onDelete={() => { }}
+        onFavorite={() => { }}
+        isFavorite={true}
+      />
+    );
+
+    // WHEN: The component is rendered
+    // THEN: The button text should be "Remove from Favorites"
+    cy.contains('Remove from Favorites').should('be.visible');
+  });
+
+  it('changes the button style based on isFavorite', () => {
+    // GIVEN: A MovieItem component with isFavorite set to false
+    cy.mount(
+      <MovieItem
+        movie={mockMovie}
+        onEdit={() => { }}
+        onDelete={() => { }}
+        onFavorite={() => { }}
+        isFavorite={false}
+      />
+    );
+
+    // WHEN: The component is rendered
+    // THEN: The "Add to Favorites" button should have class bg-gray-500
+    cy.contains('Add to Favorites').should('have.class', 'bg-gray-500');
+
+    // GIVEN: A MovieItem component with isFavorite set to true
+    cy.mount(
+      <MovieItem
+        movie={mockMovie}
+        onEdit={() => { }}
+        onDelete={() => { }}
+        onFavorite={() => { }}
+        isFavorite={true}
+      />
+    );
+
+    // WHEN: The component is rendered
+    // THEN: The "Remove from Favorites" button should have class bg-green-500
+    cy.contains('Remove from Favorites').should('have.class', 'bg-green-500');
   });
 });

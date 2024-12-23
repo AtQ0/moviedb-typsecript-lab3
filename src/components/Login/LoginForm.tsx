@@ -1,60 +1,73 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
+'use client';
+import React, { useState } from "react";
 
-export default function LoginForm() {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [error, setError] = useState<string>('');
+interface LoginFormProps {
+    onLoginSuccess: (userId: string) => void; // UUID is a string
+}
 
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setErrorMessage("");
 
-        // Clear previous error
-        setError('');
+        try {
+            const response = await fetch(`/api/register?email=${email}&password=${password}`);
+            const data = await response.json();
 
-        // Check if email and password are provided
-        if (!email || !password) {
-            setError('Email and password are required');
-            return;
+            if (response.ok) {
+                console.log("Login successful!");
+                console.log("User ID:", data.userId); // Log the UUID
+                onLoginSuccess(data.userId); // Pass the UUID to parent component
+            } else {
+                setErrorMessage(data.message || "Invalid login credentials");
+            }
+        } catch (error) {
+            console.error("Error during login:", error);
+            setErrorMessage("An error occurred, please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
-
-        // Simulate successful login
-        console.log('Logging in with', { email, password });
-        alert('Login successful');
     };
 
     return (
-        <div className="flex flex-col justify-center rounded-lg items-center bg-blue-200 p-10">
-
-            <h1 className="text-2xl font-bold text-center mb-10">Login</h1>
-            <form onSubmit={handleLogin}>
-                <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-                <div className="mb-6">
-                    <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-                {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-                <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    Login
-                </button>
-                <p className='mt-3 text-xs'>Dont have an account? Register <Link href="/register">here</Link>!</p>
-            </form>
-
-        </div>
+        <form onSubmit={handleSubmit} className="p-6">
+            <h2 className="text-2xl mb-4">Login</h2>
+            <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-2 mb-4 border"
+            />
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full p-2 mb-4 border"
+            />
+            <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full p-2 bg-blue-500 text-white"
+            >
+                {isSubmitting ? "Logging in..." : "Login"}
+            </button>
+            {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+            <p className="mt-4 text-center">
+                Don’t have an account?{" "}
+                <a href="/register" className="text-blue-700 hover:underline">
+                    Register here!
+                </a>
+            </p>
+        </form>
     );
 }

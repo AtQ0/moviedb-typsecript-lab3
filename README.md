@@ -69,11 +69,15 @@ bun dev
 - **Local Development Environment**: The app runs locally, making it easy for developers to set up and contribute.
 
 ## Features:
+- **Register an account**: Add a new user to the database.
+- **Login specific user**: Login to an account of a specific user.
 - **Add Movie**: Add a new movie by specifying the name and release year.
 - **Edit Movie**: Edit the details (name and year) of an existing movie.
 - **Delete Movie**: Remove a movie from the list.
 - **Dynamic Data Handling**: Perform dynamic updates to the movie list with API calls to manage the movie data.
 - **Responsive UI**: The app is responsive and designed using **Tailwind CSS**, ensuring good user experience on both desktop and mobile devices.
+- **Add Movie to Favorites**: Add a new movie to users favorite list.
+- **Remove Movie from Favorites**: Remove a movie from users favorite list.
 
 
 ## Learn More

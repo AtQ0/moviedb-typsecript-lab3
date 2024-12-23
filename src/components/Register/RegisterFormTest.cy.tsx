@@ -1,35 +1,39 @@
-import RegisterForm from './RegisterForm';
+import RegisterForm from './RegisterForm'; // Adjust the import path accordingly
 
-describe('<Register /> Component', () => {
-    beforeEach(() => {
-        // Mount the Register component
-        cy.mount(RegisterForm);
+describe('RegisterForm Component', () => {
+    it('should render the form correctly', () => {
+        // GIVEN: A RegisterForm component is mounted
+        cy.mount(<RegisterForm onRegister={() => { }} />);
+
+        // WHEN: The form is rendered
+        // THEN: The form elements (fields and button) should be visible
+        cy.get('h2').should('contain', 'Register');
+        cy.get('input[name="username"]').should('be.visible');
+        cy.get('input[name="email"]').should('be.visible');
+        cy.get('input[name="password"]').should('be.visible');
+        cy.get('input[name="confirmPassword"]').should('be.visible');
+        cy.get('button[type="submit"]').should('be.visible');
     });
 
-    it('shows an error when form fields are empty', () => {
-        cy.get('form').should('be.visible');
-        cy.contains('Register').click();
-        cy.contains('All fields are required.').should('be.visible');
-    });
+    it('should call onRegister with valid input', () => {
+        const mockOnRegister = cy.stub().as('onRegister');
 
-    it('shows an error for invalid email', () => {
-        cy.get('input[name="email"]').type('invalidemail');
-        cy.contains('Register').click();
-        cy.contains('Please enter a valid email address.').should('be.visible');
-    });
+        // GIVEN: A RegisterForm component with a mock onRegister function
+        cy.mount(<RegisterForm onRegister={mockOnRegister} />);
 
-    it('shows an error when passwords do not match', () => {
-        cy.get('input[name="password"]').type('password123');
-        cy.get('input[name="confirmPassword"]').type('password321');
-        cy.contains('Register').click();
-        cy.contains('Passwords do not match.').should('be.visible');
-    });
+        // WHEN: A valid form is submitted
+        cy.get('input[name="username"]').type('valid_username');
+        cy.get('input[name="email"]').type('testuser@example.com');
+        cy.get('input[name="password"]').type('Password1');
+        cy.get('input[name="confirmPassword"]').type('Password1');
+        cy.get('button[type="submit"]').click();
 
-    it('shows success when registration is successful', () => {
-        cy.get('input[name="email"]').type('test@example.com');
-        cy.get('input[name="password"]').type('password123');
-        cy.get('input[name="confirmPassword"]').type('password123');
-        cy.contains('Register').click();
-        cy.contains('Registration Successful!').should('be.visible');
+        // THEN: The onRegister function should be called with the correct arguments
+        cy.get('@onRegister').should(
+            'have.been.calledWith',
+            'testuser@example.com',
+            'Password1',
+            'valid_username'
+        );
     });
 });

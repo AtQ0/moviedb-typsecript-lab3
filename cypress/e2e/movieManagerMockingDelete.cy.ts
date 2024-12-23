@@ -1,45 +1,43 @@
 describe('<MovieManager /> - Delete Movie', () => {
     it('deletes a movie and updates the list', () => {
-        const movieToDelete = { id: 1, name: 'Inception', year: 2010 };
+        const movieToDelete = { id: 1, name: 'Ace Ventura', year: 1994 };
         const remainingMovie = { id: 2, name: 'Interstellar', year: 2014 };
 
-        // 1. Mock the initial GET request for the movie list
+        // GIVEN: The movie list contains two movies, and the user wants to delete "Ace Ventura"
+        // Mock the GET request for the movie list
         cy.intercept('GET', '/api/movies', {
             statusCode: 200,
-            body: [movieToDelete, remainingMovie], // Initial list with the movie to delete
+            body: [movieToDelete, remainingMovie],
         }).as('getMovies');
 
-        // 2. Mock the DELETE request for the movie
-        cy.intercept('DELETE', `/api/movies?id=${movieToDelete.id}`, {
+        // Mock the DELETE request for the movie
+        cy.intercept('DELETE', `/api/movies?movie_id=${movieToDelete.id}`, {
             statusCode: 200,
             body: { message: `Movie with ID ${movieToDelete.id} deleted` },
         }).as('deleteMovie');
 
-        // 3. Visit the page
-        cy.visit('http://localhost:3000/user');
+        // WHEN: The user visits the movie manager page, deletes the movie "Ace Ventura"
+        cy.visit('http://localhost:3000/user/365ee8bd-2bfe-41b0-9b3e-6eef402d297f');
 
-        // 4. Wait for the GET request to load the movie list
+        // Wait for the GET request to load the movie list
         cy.wait('@getMovies');
 
-        // 5. Add a delay after the GET request (e.g., wait for 1 second)
-        cy.wait(1000); // Wait for 1 second after the initial movie list is loaded
+        // Ensure the movie "Ace Ventura" is visible initially
+        cy.contains('Ace Ventura (1994)').should('exist');
 
-        // 6. Assert that the movie "Inception" is visible in the list initially
-        cy.contains('Inception (2010)').should('exist');
+        // Click the delete button for "Ace Ventura"
+        cy.contains('Ace Ventura (1994)').parent().find('button.bg-red-500').click();
 
-        // 7. Delete the movie
-        cy.contains('Inception (2010)').parent().find('button.bg-red-500').click();
-
-        // 8. Wait for the DELETE request to finish
+        // Wait for the DELETE request to complete
         cy.wait('@deleteMovie');
 
-        // 9. Add a delay after the DELETE request (e.g., wait for 1 second)
-        cy.wait(1000); // Wait
+        // Wait for the UI to update
+        cy.wait(1000);
 
-        // 10. Assert that the movie "Inception" is no longer on the page
-        cy.contains('Inception (2010)').should('not.exist');
+        // THEN: Verify that "Ace Ventura" is no longer in the movie list
+        cy.contains('Ace Ventura (1994)').should('not.exist');
 
-        // 11. Verify that the remaining movie "Interstellar" is still visible
+        // Verify that the remaining movie "Interstellar" is still visible
         cy.contains('Interstellar (2014)').should('exist');
     });
 });
